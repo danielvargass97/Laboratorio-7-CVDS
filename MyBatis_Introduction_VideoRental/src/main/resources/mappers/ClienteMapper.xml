@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="edu.eci.cvds.sampleprj.dao.mybatis.mappers.ClienteMapper">
+    <select parameterType="map" id="consultarClientes" resultMap="ClienteResult">
+        select
+
+        c.nombre,
+        c.documento,
+        c.telefono,
+        c.direccion,
+        c.email,
+        c.vetado,
+
+        ir.id ,
+        ir.fechainiciorenta ,
+        ir.fechafinrenta ,
+
+        i.id ,
+        i.nombre ,
+        i.descripcion ,
+        i.fechalanzamiento ,
+        i.tarifaxdia ,
+        i.formatorenta ,
+        i.genero ,
+        ti.id ,
+        ti.descripcion
+
+        FROM VI_CLIENTES as c
+        left join VI_ITEMRENTADO as ir on c.documento=ir.CLIENTES_documento
+        left join VI_ITEMS as i on ir.ITEMS_id=i.id
+        left join VI_TIPOITEM as ti on i.TIPOITEM_id=ti.id
+    </select>
+
+    <resultMap type='VI_CLIENTES' id='VI_CLIENTESResult'>
+        <id property='documento' column='documento'/>
+        <result property='nombre' column='nombre'/>
+        <result property='telefono' column='telefono'/>
+        <result property='direccion' column='direccion'/>
+        <result property='email' column='email'/>
+        <result property='vetado' column='vetado'/>
+        <collection property='VI_ITEMRENTADO' ofType='VI_ITEMRENTADO' resultMap="VI_ITEMRENTADOResult" columnPrefix="VI_ITEMRENTADO_"></collection>
+    </resultMap>
+
+    <resultMap type='VI_ITEMRENTADO' id='VI_ITEMRENTADOResult'>
+        <id property='id' column='id'/>
+        <result property='CLIENTES_documento' column='CLIENTES_documento'/>
+        <result property='ITEMS_id' column='ITEMS_id'/>
+        <result property='fechainiciorenta' column='fechainiciorenta'/>
+        <result property='fechafinrenta' column='fechafinrenta'/>
+        <result property='test' column='test'/>
+    </resultMap>
+
+    <resultMap type='VI_ITEMS' id='VI_ITEMSResult'>
+        <id property='id' column='id'/>
+        <result property='nombre' column='nombre'/>
+        <result property='descripcion' column='descripcion'/>
+        <result property='fechalanzamiento' column='fechalanzamiento'/>
+        <result property='tarifaxdia' column='tarifaxdia'/>
+        <result property='formatorenta' column='formatorenta'/>
+        <result property='genero' column='genero'/>
+        <result property='TIPOITEM_id' column='TIPOITEM_id'/>
+        <collection property='VI_ITEMRENTADO' ofType='VI_ITEMRENTADO' resultMap="VI_ITEMRENTADOResult" columnPrefix="VI_ITEMRENTADO_"></collection>
+    </resultMap>
+
+    <resultMap type='VI_TIPOITEM' id='VI_TIPOITEMResult'>
+        <id property='id' column='id'/>
+        <result property='descripcion' column='descripcion'/>
+        <collection property='VI_ITEMS' ofType='VI_ITEMS' resultMap="VI_ITEMSResult" columnPrefix="VI_ITEMS_"></collection>
+    </resultMap>
+          	
+</mapper>
